@@ -3,4 +3,4 @@ title: About
 description: About page
 layout: post
 ---
-About page for the [Moonwalk template](https://github.com/Zo-Bro-23/moonwalk-template) by [Zo-Bro-23](https://github.com/Zo-Bro-23)
+This will be a page for my writeups of various Capture The Flags. I am a college student at Valencia college studying cybersecurity and an aspiring Penetration Tester
