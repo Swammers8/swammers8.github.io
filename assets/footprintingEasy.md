@@ -50,7 +50,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 97.26 seconds
 ```
 
-We have 4 ports open. FTP, SSH, DNS, and then seemingly a second FTP server. The one on port 2121 Has a custom banner of `Ceils FTP`.
+We have 4 ports open. FTP, SSH, DNS, and then seemingly a second FTP server. The one on port 2121 has a custom banner of `Ceils FTP`.
 Let's first try our creds on SSH
 
 ```
@@ -175,8 +175,10 @@ inlanefreight.htb.      604800  IN      SOA     inlanefreight.htb. root.inlanefr
 ```
 
 And yes, it appears we can perform a zone transfer. We would count this as a finding to the company.
-Now let's login as Ceil. First we'll change the permissions on our id_rsa
+Now let's login as Ceil. First we'll change the permissions on our id_rsa.
+
 `chmod 600 id_rsa`
+
 And login with ssh
 
 ```
@@ -246,8 +248,10 @@ Looks like she made the flag.txt! It looks like she made a directory called `/ho
 ceil@NIXEASY:~$ cd /home
 ceil@NIXEASY:/home$ ls                                                                                                  ceil  cry0l1t3  flag
 ceil@NIXEASY:/home$ cd flag
-ceil@NIXEASY:/home/flag$ ls                                                                                             flag.txt
-ceil@NIXEASY:/home/flag$ cat flag.txt                                                                                   HTB{<redacted>}
+ceil@NIXEASY:/home/flag$ ls                                                                                             
+flag.txt
+ceil@NIXEASY:/home/flag$ cat flag.txt                                                                                   
+HTB{<redacted>}
 ceil@NIXEASY:/home/flag$
 ```
 
