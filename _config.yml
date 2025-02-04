@@ -1,5 +1,3 @@
-title: Swammers8 Writeups
-
 favicon: "./beans.png" # relative path to site's favicon
 
 # remote_theme: abhinavs/moonwalk
@@ -10,8 +8,8 @@ theme_config:
   appearance_toggle: true # if appearance can be switched by user
   back_home_text: "home.." # customize text for homepage link in post layout
   date_format: "%Y-%m-%d" # customize how date is formatted
-  show_description: true # show blog description
-  show_navbar: true # show horizontal navbar
+  show_description: false # show blog description
+  show_navbar: false # show horizontal navbar
   show_footer: true # show footer links in home page,add in _data/home.yml
   show_copyright: true # show copyright notice in footer
   # following keys are using to create home layout
