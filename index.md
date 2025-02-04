@@ -1,9 +1,12 @@
+![Image](beans.png)
 # H1
 ## H2
 ### H3
 **Bold Text**
 *italic*
 > blockquote
+This is text
+
 1. item 1
 2. item 2
 3. item 3

@@ -1,9 +1,3 @@
-#project_entries:
-#  - title: Project 1
-#    url: project1
-#    desc: My first project!
-#    highlight: 2013-Present
-    
 footer_entries:
   - title: About Me
     url: about
