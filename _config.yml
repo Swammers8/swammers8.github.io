@@ -1,8 +1,4 @@
-title: Moonwalk Template
-author: Zohan Subhash
-url: https://web.zohan.tech/moonwalk-template-test # root address of the site
-description: Template for generating a Jekyll website based on the Moonwalk (@abhinavs/moonwalk) theme
-permalink: /:slug
+title: Swammers8 Writeups
 
 favicon: "./logo.png" # relative path to site's favicon
 
