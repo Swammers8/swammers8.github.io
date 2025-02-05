@@ -3,7 +3,7 @@
 ### Footprinting Module
 - [Easy](./assets/footprintingEasy)
 - [Medium](./assets/footprintingMedium)
-- Hard
+- [Hard](./assets/footprintingHard)
 
 ### Attacking Common Services
 - Easy
