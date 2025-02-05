@@ -10,4 +10,3 @@
 - Medium
 - Hard
 
-![image test](beans.png)

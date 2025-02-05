@@ -1,3 +1,7 @@
+navbar_entries:
+  - title: Home Page
+    url: index
+
 footer_entries:
   - title: About Me
     url: about
