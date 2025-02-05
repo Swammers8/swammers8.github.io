@@ -259,7 +259,7 @@ PORT     STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 1.24 seconds
 ```
 
-It looks like we can access a share with some ticket information. We can mount the file sshare with the following commands:
+It looks like we can access a share with some support tickets from this `TechSupport` file share. We can mount the file sshare with the following commands:
 
 ```
 mkdir target-NFS
@@ -269,7 +269,7 @@ sudo mount -t nfs <ip>:/ ./target-NFS/ -o nolock
 After snooping around these files one of them sticks out to me.
 
 ```
-root@samr-virtual-machine:/mnt/target/TechSupport# cat ticket4238791283782.txt
+$ cat ticket4238791283782.txt
 Conversation with InlaneFreight Ltd
 
 Started on November 10, 2021 at 01:27 PM London time GMT (GMT+0200)
@@ -358,7 +358,7 @@ smb: \> ls
 smb: \>
 ```
 
-Interesting! Let's download it an read it!
+Interesting! Let's download it and read it!
 
 ```
 $ cat important.txt 
