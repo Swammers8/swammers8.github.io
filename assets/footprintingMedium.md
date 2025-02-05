@@ -259,7 +259,7 @@ PORT     STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 1.24 seconds
 ```
 
-It looks like we can access a share with some support tickets from this `TechSupport` file share. We can mount the file sshare with the following commands:
+It looks like we can access a share with some support tickets from this `TechSupport` file share. We can mount the file share with the following commands:
 
 ```
 mkdir target-NFS
