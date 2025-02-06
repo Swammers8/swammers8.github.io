@@ -2,7 +2,7 @@
 
 ---
 
-<h1>This is test html<h1>
+<p>This is test html<p>
 
 # Footprinting Lab - Easy
 ---
