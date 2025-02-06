@@ -2,9 +2,8 @@
 
 ---
 
-<p>This is test html<p>
-
 # Footprinting Lab - Easy
+
 ---
 
 > Synopsis
