@@ -1,5 +1,12 @@
+[Main Page](/index)
+
+---
+
+<h1>This is test html<h1>
+
 # Footprinting Lab - Easy
 ---
+
 > Synopsis
 "We were commissioned by the company Inlanefreight Ltd to test three different servers in their internal network. The company uses many different services, and the IT security department felt that a penetration test was necessary to gain insight into their overall security posture.
 The first server is an internal DNS server that needs to be investigated. In particular, our client wants to know what information we can get out of these services and how this information could be used against its infrastructure. Our goal is to gather as much information as possible about the server and find ways to use that information against the company. However, our client has made it clear that it is forbidden to attack the services aggressively using exploits, as these services are in production.
