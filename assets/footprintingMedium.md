@@ -375,10 +375,10 @@ Looks like we have potential administrative credentials! But first let's see if 
 xfreerdp /u:alex /p:'lol123!mD' /v:10.129.213.48
 ```
 
-![rdp img](/assets/rdp-alex.png)
+![rdp img](/assets/imgs/rdp-alex.png)
 
 I tried to login to the MSSQL Management service, as that's where out `HTB` account is, but we failed to login with our found creds.
-![sql img failed](/assets/sql-fail.png)
+![sql img failed](/assets/imgs/sql-fail.png)
 
 Well let's try logging into RDP as the `administrator` instead of `alex`.
 
@@ -386,13 +386,13 @@ Well let's try logging into RDP as the `administrator` instead of `alex`.
 xfreerdp /u:Administrator /p:'87N1ns@slls83' /v:10.129.217.19
 ```
 
-![rdp adm](/assets/rdp-adm.png)
-![sql db](/assets/sql-db.png)
+![rdp adm](/assets/imgs/rdp-adm.png)
+![sql db](/assets/imgs/sql-db.png)
 
 It works!
 
-![sql list](/assets/sql-list.png)
-![sql htb](/assets/sql-htb.png)
+![sql list](/assets/imgs/sql-list.png)
+![sql htb](/assets/imgs/sql-htb.png)
 
 And we can find the HTB password in our **accounts** database.
 And with that, this box is solved!
