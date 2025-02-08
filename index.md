@@ -6,7 +6,7 @@
 - [Hard](./assets/footprintingHard)
 
 ### Attacking Common Services
-- [East](./assers/attackingCmnSrvcs)
+- [Easy](./assets/attackingCmnSrvcs)
 - Medium
 - Hard
 
