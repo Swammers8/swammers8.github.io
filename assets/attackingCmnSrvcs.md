@@ -192,7 +192,7 @@ ftp> ls
 receive aborted. Waiting for remote to finish abort.
 ```
 
-We logged in! But it doesn't look like FTP wants to list anything. This is because FTP is running in passive mode. Let's try turning it off and see what we get.
+We logged in! But it doesn't look like FTP wants to list anything. This is because FTP is running in passive mode and theres probably some firewall thing blocking our a connection. Let's try turning it off and see what we get.
 
 ```
 ftp> passive
@@ -206,7 +206,8 @@ ftp> ls
 ftp> 
 ```
 
-One thing I want to point out is that this ftp server is also running on https! If we connect to the https server and provide `fiona`'s credentials we are greated this page:
+One thing I want to point out is that we can access the FTP server from the HTTPS service! If we connect to the boxe's https server and provide `fiona`'s credentials we are greated this page:
+
 !(ftpoverhttps)[/assets/imgs/fohs.png]
 
 Let's see what these files have to say.
@@ -229,8 +230,6 @@ local: WebServersInfo.txt remote: WebServersInfo.txt
 ftp>
 ```
 
-docs.txt
-
 ```
 $ cat docs.txt
 I'm testing the FTP using HTTPS, everything looks good.
@@ -247,6 +246,7 @@ Test Command: curl http://localhost/test.php
 ```
 
 Yep! Confirms the FTP ovoer HTTPS. And the `WebServersInfo.txt` is interesting. The HTTP server is a dafault page, but if we try this `test.php` we see the following.
+
 !(hello world)[/assets/imgs/hw.png
 
 This tells us that the server is executing php, and the website root folder is in `C:\xampp\htdocs\`. If we can get a php shell here we could get a foothold. However, we only have access to the FTP server which is in the `C:\CoreFTP` folder. We can't get anything executed from there. So we have to find some other way to get a foothold. Looking back at our nmap scan, we have one other service running, MySQL. Let's test our found creds there.
@@ -313,9 +313,11 @@ Query OK, 1 row affected (0.058 sec)
 ```
 
 Then I went to `http://inlanefreight.htb/shell.php` and it worked!
+
 !(shell)[/assets/imgs/phpshell.png]
 
 I then used a neat little website called [revshells.com](revshells.com) and generated a nice little base64 encoded reverse shell for us.
+
 !(revshells)[/assets/revshells.png]
 
 I then made a listener with netcat and prepended our powershell shell to the end of our link.
