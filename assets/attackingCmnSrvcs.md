@@ -208,7 +208,7 @@ ftp>
 
 One thing I want to point out is that we can access the FTP server from the HTTPS service! If we connect to the boxe's https server and provide `fiona`'s credentials we are greated this page:
 
-!(ftpoverhttps)[/assets/imgs/fohs.png]
+![ftpoverhttps](/assets/imgs/fohs.pn)]
 
 Let's see what these files have to say.
 
@@ -240,6 +240,7 @@ Ports: 21 & 443
 Test Command: curl -k -H "Host: localhost" --basic -u <username>:<password> https://localhost/docs.txt
 
 Apache
+┌──(kali㉿DESKTOP-JETQH0C)-[~/mygitpage/swammers8.github.io/assets]
 Directory "C:\xampp\htdocs\"
 Ports: 80 & 4443
 Test Command: curl http://localhost/test.php
@@ -247,7 +248,7 @@ Test Command: curl http://localhost/test.php
 
 Yep! Confirms the FTP ovoer HTTPS. And the `WebServersInfo.txt` is interesting. The HTTP server is a dafault page, but if we try this `test.php` we see the following.
 
-!(hello world)[/assets/imgs/hw.png
+![hello world](/assets/imgs/hw.png)
 
 This tells us that the server is executing php, and the website root folder is in `C:\xampp\htdocs\`. If we can get a php shell here we could get a foothold. However, we only have access to the FTP server which is in the `C:\CoreFTP` folder. We can't get anything executed from there. So we have to find some other way to get a foothold. Looking back at our nmap scan, we have one other service running, MySQL. Let's test our found creds there.
 
@@ -318,7 +319,7 @@ Then I went to `http://inlanefreight.htb/shell.php` and it worked!
 
 I then used a neat little website called [revshells.com](revshells.com) and generated a nice little base64 encoded reverse shell for us.
 
-!(revshells)[/assets/revshells.png]
+![revshells](/assets/revshells.png)
 
 I then made a listener with netcat and prepended our powershell shell to the end of our link.
 
