@@ -14,4 +14,8 @@
 | Footprinting               | [Easy](./assets/footprintingEasy)  | [Medium](./assets/footprintingMedium) | [Hard](./assets/footprintingHard) |
 | Attacking Common Services  | [Easy](./assets/attackingCmnSrvcs) | [Medium](/assets/attackingCmnSrvcsMed) | Hard |
 
+## <span style="color:indigo;">Custom Challenges</span>
 
+> Feeling up to a challenge? Here are some custom challenges I have created myself!
+
+- [Challenge 01](/assets/challenges/01)
