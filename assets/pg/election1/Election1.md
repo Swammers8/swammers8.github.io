@@ -227,7 +227,7 @@ Linux election 5.4.0-120-generic #136~18.04.1-Ubuntu SMP Fri Jun 10 18:00:44 UTC
 love@election:~$ ls
 Desktop  Documents  Downloads  local.txt  Music  Pictures  Public  Templates  Videos
 love@election:~$ cat local.txt
-597bb193f1bb2dcdb2623ec826337679
+597b[redacted]
 ```
 
 Got the user flag! Time for some priv esc.
@@ -312,7 +312,7 @@ love@election:/tmp$ python3 exploit_nss.py
 uid=0(root) gid=0(root) groups=0(root),4(adm),24(cdrom),30(dip),33(www-data),46(plugdev),116(lpadmin),126(sambashare),1000(love)
 # cd /root
 # cat proof.txt                                                                                                                      
-bc26beb9f14d25dfc6887ceb4db83331
+bc26[redacted]
 ```
 
 Boom! It worked. We are now root!
