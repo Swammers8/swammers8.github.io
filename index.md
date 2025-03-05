@@ -16,6 +16,12 @@
 
 ---
 
+## <span style="color:orange;">OffSec's Proving Grounds</span>
+
+- [Election1](./assets/pg/election1/Election1.md)
+
+---
+
 ## <span style="color:mediumpurple;">Custom Challenges</span>
 
 Feeling up to a challenge? Here are some custom challenges I have created myself!
