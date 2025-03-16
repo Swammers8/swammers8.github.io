@@ -19,6 +19,7 @@
 ## <span style="color:orange;">OffSec's Proving Grounds</span>
 
 - [Election1](./assets/pg/election1/Election1.md)
+- [Stapler](./assets/pg/stapler/writeup.md)
 
 ---
 
