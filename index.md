@@ -12,7 +12,7 @@
 
 |---------------------------|----------|----------|----------|
 | Footprinting               | [Easy](./assets/footprintingEasy)  | [Medium](./assets/footprintingMedium) | [Hard](./assets/footprintingHard) |
-| Attacking Common Services  | [Easy](./assets/attackingCmnSrvcs) | [Medium](/assets/attackingCmnSrvcsMed) | Hard |
+| Attacking Common Services  | [Easy](./assets/cmnsrvcs/attackingCmnSrvcs) | [Medium](/assets/cmnsrvcs/attackingCmnSrvcsMed) | [Hard](./assets/cmnsrvcs/hard/writeup.md) |
 
 ---
 
