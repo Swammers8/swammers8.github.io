@@ -7,23 +7,26 @@
 
 ---
 
-## <span style="color:green;">Hack The Box Academy Skill Assessments</span>
+## Hack The Box Academy Skill Assessments
 
 
-|---------------------------|----------|----------|----------|
-| Footprinting               | [Easy](./assets/footprintingEasy)  | [Medium](./assets/footprintingMedium) | [Hard](./assets/footprintingHard) |
-| Attacking Common Services  | [Easy](./assets/cmnsrvcs/attackingCmnSrvcs) | [Medium](/assets/cmnsrvcs/attackingCmnSrvcsMed) | [Hard](./assets/cmnsrvcs/hard/writeup.md) |
+Footprinting
+- [Easy](./assets/footprintingEasy)
+- [Medium](./assets/footprintingMedium)
+- [Hard](./assets/footprintingHard)
+Attacking Common Services
+- [Easy](./assets/cmnsrvcs/attackingCmnSrvcs)
+- [Medium](/assets/cmnsrvcs/attackingCmnSrvcsMed)
+- [Hard](./assets/cmnsrvcs/hard/writeup.md) |
 
----
 
-## <span style="color:orange;">OffSec's Proving Grounds</span>
+## OffSec's Proving Grounds
 
 - [Election1](./assets/pg/election1/Election1.md)
 - [Stapler](./assets/pg/stapler/writeup.md)
 
----
 
-## <span style="color:mediumpurple;">Custom Challenges</span>
+## Custom Challenges
 
 Feeling up to a challenge? Here are some custom challenges I have created myself!
 
