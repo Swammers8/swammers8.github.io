@@ -10,14 +10,15 @@
 ## Hack The Box Academy Skill Assessments
 
 
-Footprinting
+### Footprinting
 - [Easy](./assets/footprintingEasy)
 - [Medium](./assets/footprintingMedium)
 - [Hard](./assets/footprintingHard)
-Attacking Common Services
+
+### Attacking Common Services
 - [Easy](./assets/cmnsrvcs/attackingCmnSrvcs)
 - [Medium](/assets/cmnsrvcs/attackingCmnSrvcsMed)
-- [Hard](./assets/cmnsrvcs/hard/writeup.md) |
+- [Hard](./assets/cmnsrvcs/hard/writeup.md)
 
 
 ## OffSec's Proving Grounds
