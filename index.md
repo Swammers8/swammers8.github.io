@@ -26,6 +26,9 @@
 - [Election1](./assets/pg/election1/Election1.md)
 - [Stapler](./assets/pg/stapler/writeup.md)
 
+## Misc.
+
+- [Sequel Dump](./assets/sequel/writeup.md)
 
 ## Custom Challenges
 
