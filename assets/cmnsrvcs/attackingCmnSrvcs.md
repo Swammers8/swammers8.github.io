@@ -2,7 +2,7 @@
   <head>
     <link rel="icon" href="/assets/imgs/beans.png" type="image/png">
   </head>
-  <img src="/assets/imgs/beans.png" alt="Logo" style="position: absolute; top: 0; left: 0; width: 200px; height: auto;">
+  <img src="/assets/imgs/beans.png" alt="Logo" style="position: absolute; top: 0; left: 0; width: 100px; height: auto;">
 </html>
 
 [Main Page](/index)
