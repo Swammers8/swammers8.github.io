@@ -69,18 +69,18 @@
         <ul>
             <li><a href="./assets/cmnsrvcs/attackingCmnSrvcs">Easy</a></li>
             <li><a href="/assets/cmnsrvcs/attackingCmnSrvcsMed">Medium</a></li>
-            <li><a href="./assets/cmnsrvcs/hard/writeup.md">Hard</a></li>
+            <li><a href="./assets/cmnsrvcs/hard/writeup">Hard</a></li>
         </ul>
 
         <h1>OffSec's Proving Grounds</h1>
         <ul>
-            <li><a href="./assets/pg/election1/Election1.md">Election1</a></li>
-            <li><a href="./assets/pg/stapler/writeup.md">Stapler</a></li>
+            <li><a href="./assets/pg/election1/Election1">Election1</a></li>
+            <li><a href="./assets/pg/stapler/writeup">Stapler</a></li>
         </ul>
 
         <h1>TryHackMe</h1>
         <ul>
-            <li><a href="./assets/sequel/writeup.md">Hackfinity - Sequel Dump</a></li>
+            <li><a href="./assets/sequel/writeup">Hackfinity - Sequel Dump</a></li>
         </ul>
 
         <h1>Custom Challenges</h1>
