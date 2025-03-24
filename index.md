@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,12 +9,12 @@
             font-family: Arial, sans-serif;
             background-color: #121212;
             color: #ffffff;
-            text-align: center;
             margin: 0;
             padding: 20px;
         }
         h1, h2 {
             color: #00ffcc;
+            text-align: center;
         }
         .container {
             max-width: 800px;
@@ -42,11 +41,19 @@
             background: #00ffcc;
             border-radius: 5px;
         }
+        /* Logo Positioning */
+        .logo {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            width: 80px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
 
-    <img src="/assets/imgs/beans.png" alt="Logo" width="100">
+    <img src="/assets/imgs/beans.png" alt="Logo" class="logo">
 
     <div class="container">
         <h1>Hack The Box Academy Skill Assessments</h1>
