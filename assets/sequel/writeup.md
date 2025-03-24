@@ -9,6 +9,8 @@
 
 # Sequel Dump
 
+> A wave of suspicious web requests has been detected, hammering our database-driven application. Analysts suspect an automated SQL injection attack has been launched using sqlmap, leading to potential data exfiltration. Investigate the provided packet capture (PCAP) file to uncover the attacker's actions and determine what was stolen!
+
 ---
 
 Today I’d like to share a challenge from TryHackMe’s student CTF event, Hackfinity Battle. The challenge was labeled as `Hard` and was worth 90 points. Let’s take a look!
@@ -33,9 +35,7 @@ We can click on the packet and copy the http request in UTF-8. We can use [Cyber
 GET /search_app/search.php?query=1&XPGZ=7942 AND 1=1 UNION ALL SELECT 1,NULL,'<script>alert("XSS")</script>',table_name FROM information_schema.tables WHERE 2>1--/**/; EXEC xp_cmdshell('cat ../../../etc/passwd')# HTTP/1.1
 ```
 
-Much prettier! As we can see, this looks like a test for sql injection. This makes sense given the title of the challenge. 
-
-Note: I am also pretty sure the challenge mentioned something about SQLMap having been used, but since the challenge is no longer available I can’t double check lol.
+Much prettier! As we can see, this looks like a test for sql injection. This makes sense given the title and description of the challenge. 
 
 So scrolling down our capture I noticed a few more requests that looked like SQLi attempts with 500 error responses:
 
