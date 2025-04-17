@@ -68,8 +68,12 @@
         <h2>Attacking Common Services</h2>
         <ul>
             <li><a href="./assets/cmnsrvcs/attackingCmnSrvcs">Easy</a></li>
-            <li><a href="/assets/cmnsrvcs/attackingCmnSrvcsMed">Medium</a></li>
+            <li><a href="./assets/cmnsrvcs/attackingCmnSrvcsMed">Medium</a></li>
             <li><a href="./assets/cmnsrvcs/hard/writeup">Hard</a></li>
+        </ul>
+        <h2>Local Privilege Escalation</h2>
+        <ul>
+            <li><a href="./assets/llpe/writeup">Linux Local Privilege Escalation</a></li>
         </ul>
 
         <h1>OffSec's Proving Grounds</h1>
