@@ -80,6 +80,7 @@
         <ul>
             <li><a href="./assets/pg/election1/Election1">Election1</a></li>
             <li><a href="./assets/pg/stapler/writeup">Stapler</a></li>
+            <li><a href="./assets/pg/loly/writeup">Loly</a></li>
         </ul>
 
         <h1>TryHackMe</h1>
