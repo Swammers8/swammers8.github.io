@@ -68,7 +68,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 
 ```
 
-So, at a glance we have an FTP server, and SSH server on a high non-default port, a most likely flask web server, and a second web server running Apache, all running on (most likely) a Fedora Linux box.
+So, at a glance we have an FTP server, an SSH server on a high non-default port, a (most likely) flask web server, and a second web server running Apache, all running on (most likely) a Fedora Linux box.
 
 ## FTP
 
@@ -76,7 +76,7 @@ Searchsploiting the version pulls up a DOS vulnerability which is a finding but 
 
 ![image.png](image.png)
 
-I tried connecting and listing the directory but wasn’t able to see anything.
+I tried connecting via anonymous login which worked, however I wasn't able to view anything.
 
 ![image.png](image%201.png)
 
@@ -96,11 +96,11 @@ Well, onto the next service.
 
 ## 33414 Python Flask
 
-This flash site defaults to a `not found` page.
+This flask site defaults to a `not found` page.
 
 ![image.png](image%204.png)
 
-I decided to bust some directories, and for the sake of tool demonstration I used gobuster this time instead.
+I decided to bust some directories, and for the sake of tool demonstration I used `gobuster` this time instead.
 
 ![image.png](image%205.png)
 
@@ -110,11 +110,11 @@ We get these `info` and `help` pages
 
 ![image.png](image%207.png)
 
-The web page returns in json and tells us it is running `Python File Server REST API v2.5`. What sticks out to me is the `GET /file-list?dir=/tmp`. Let’s try that out:
+The web page returns in json and tells us it is running `Python File Server REST API v2.5`. What sticks out to me is the `GET /file-list?dir=/tmp` and `POST /file-upload`. Let’s try the first one out:
 
 ![image.png](image%208.png)
 
-Hmmm very interesting. It reminisces of a normal linux tmp directory. So I tried to list another directory:
+Hmmm very interesting. It reminisces of a normal linux `tmp` directory. So I tried to list another directory:
 
 ![image.png](image%209.png)
 
@@ -128,7 +128,7 @@ We see the user `alfredo`. Let’s see if we can read his home directory.
 
 We can! Unfortunately, this rest api does not let us read files, giving us an internal error when we try.
 
-So I went back to the `help` page and saw the  `/file-upload` function. We have read over the file system. Let’s see if we have write as well. I tried uploading a file with curl.
+So I went back to the `help` page and decided to try the `/file-upload` function. We have read over the file system. Let’s see if we have write as well! I tried uploading a file with curl.
 
 ```bash
 ┌──(kali㉿kali)-[~]
